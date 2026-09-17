@@ -6,6 +6,8 @@ export type CreditOverrides = {
   Leisure?: number | null;
 };
 
+export type CreditAllocations = CreditOverrides;
+
 export interface Transaction {
   id: string;
   transactionDate: string;
