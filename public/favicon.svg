@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Card Background with Gradient -->
+  <defs>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="50%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#9333ea" />
+    </linearGradient>
+    <linearGradient id="chipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <linearGradient id="chartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+  </defs>
+
+  <!-- Credit Card Shape -->
+  <rect x="4" y="10" width="56" height="38" rx="8" fill="url(#cardGrad)" stroke="#818cf8" stroke-width="1.5" />
+  
+  <!-- Magnetic Stripe / Top Accent -->
+  <path d="M4 18 H60" stroke="#312e81" stroke-width="4" opacity="0.6" />
+  
+  <!-- EMV Chip -->
+  <rect x="10" y="25" width="10" height="8" rx="2" fill="url(#chipGrad)" stroke="#d97706" stroke-width="0.75" />
+  <line x1="15" y1="25" x2="15" y2="33" stroke="#b45309" stroke-width="0.75" />
+  <line x1="10" y1="29" x2="20" y2="29" stroke="#b45309" stroke-width="0.75" />
+
+  <!-- Wireless / Contactless Waves -->
+  <path d="M24 26 C26 27.5 26 30.5 24 32" stroke="#e0e7ff" stroke-width="1.5" stroke-linecap="round" fill="none" />
+  <path d="M27 24 C30 26.5 30 31.5 27 34" stroke="#e0e7ff" stroke-width="1.5" stroke-linecap="round" fill="none" />
+
+  <!-- Financial Analytics Graph Badge (Overlay in Bottom Right) -->
+  <circle cx="48" cy="46" r="14" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+  <!-- Mini Bar Chart inside Badge -->
+  <rect x="40" y="46" width="3" height="6" rx="1" fill="#38bdf8" />
+  <rect x="45" y="42" width="3" height="10" rx="1" fill="#60a5fa" />
+  <rect x="50" y="38" width="3" height="14" rx="1" fill="url(#chartGrad)" />
+  <!-- Growth Arrow -->
+  <path d="M41 43 L46 39 L51 35 L55 35 M55 35 L55 38 M55 35 L52 35" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+</svg>
