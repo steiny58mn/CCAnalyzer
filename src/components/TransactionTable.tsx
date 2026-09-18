@@ -404,7 +404,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 pt-2">
           {/* Search Input */}
           <div className="lg:col-span-4 relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none select-none" />
             <input
               type="text"
               value={searchTerm}
@@ -417,8 +417,10 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
             />
             {searchTerm && (
               <button
+                type="button"
                 onClick={() => setSearchTerm('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer p-0.5"
+                title="Clear search"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -527,15 +529,17 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               </button>
               <div className="h-4 w-px bg-indigo-200 dark:bg-indigo-700 mx-1" />
               <button
+                type="button"
                 onClick={handleBulkDelete}
-                className="p-1 text-xs font-semibold rounded-lg text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-950/60"
+                className="p-1 text-xs font-semibold rounded-lg text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-950/60 cursor-pointer"
                 title="Delete selected"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
               <button
+                type="button"
                 onClick={() => setSelectedIds(new Set())}
-                className="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400"
+                className="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 cursor-pointer"
               >
                 Cancel
               </button>
@@ -588,7 +592,20 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
             return (
               <div
                 key={tx.id}
-                className={`p-3.5 rounded-xl border transition-all ${
+                onClick={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (
+                    target.closest('select') ||
+                    target.closest('button') ||
+                    target.closest('a') ||
+                    target.closest('input') ||
+                    target.closest('label')
+                  ) {
+                    return;
+                  }
+                  handleToggleSelectRow(tx.id);
+                }}
+                className={`p-3.5 rounded-xl border transition-all cursor-pointer select-none ${
                   isSelected
                     ? 'bg-indigo-50/80 dark:bg-indigo-950/40 border-indigo-300 dark:border-indigo-700 shadow-2xs'
                     : 'bg-white dark:bg-slate-800/90 border-slate-200 dark:border-slate-800 shadow-2xs'
@@ -596,20 +613,23 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               >
                 {/* Card Top: Checkbox, Date, Card Badge, Category Badge */}
                 <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <div className="flex items-center gap-2">
+                  <label
+                    className="flex items-center gap-2 cursor-pointer select-none"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <input
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => handleToggleSelectRow(tx.id)}
                       className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                     />
-                    <span className="font-mono text-xs font-semibold text-slate-600 dark:text-slate-300">
+                    <span className="font-mono text-xs font-semibold text-slate-600 dark:text-slate-300 select-none">
                       {tx.transactionDate}
                     </span>
                     {tx.postedDate && tx.postedDate !== tx.transactionDate && (
-                      <span className="text-[10px] text-slate-400">Post: {tx.postedDate}</span>
+                      <span className="text-[10px] text-slate-400 select-none">Post: {tx.postedDate}</span>
                     )}
-                  </div>
+                  </label>
 
                   <div className="flex items-center flex-wrap gap-1.5 justify-end">
                     {/* Card Badge */}
@@ -732,13 +752,15 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
         <table className="w-full text-left text-xs sm:text-sm border-collapse">
           <thead>
             <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700/80 text-slate-600 dark:text-slate-400 uppercase text-[11px] tracking-wider font-semibold">
-              <th className="py-3.5 pl-4 pr-2 w-10">
-                <input
-                  type="checkbox"
-                  checked={isAllPaginatedSelected}
-                  onChange={(e) => handleSelectAll(e.target.checked)}
-                  className="rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-                />
+              <th className="py-3.5 pl-4 pr-2 w-10 cursor-pointer select-none">
+                <label className="flex items-center justify-center cursor-pointer select-none w-full h-full py-1">
+                  <input
+                    type="checkbox"
+                    checked={isAllPaginatedSelected}
+                    onChange={(e) => handleSelectAll(e.target.checked)}
+                    className="rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                  />
+                </label>
               </th>
               <th
                 onClick={() => handleSort('date')}
@@ -839,36 +861,54 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                 return (
                   <tr
                     key={tx.id}
-                    className={`group transition-colors ${
+                    onClick={(e) => {
+                      const target = e.target as HTMLElement;
+                      if (
+                        target.closest('select') ||
+                        target.closest('button') ||
+                        target.closest('a') ||
+                        target.closest('input') ||
+                        target.closest('label')
+                      ) {
+                        return;
+                      }
+                      handleToggleSelectRow(tx.id);
+                    }}
+                    className={`group transition-colors cursor-pointer select-none ${
                       isSelected
                         ? 'bg-indigo-50/70 dark:bg-indigo-950/40'
                         : 'hover:bg-slate-50/80 dark:hover:bg-slate-800/40'
                     }`}
                   >
-                    {/* Row Checkbox */}
-                    <td className="py-3 pl-4 pr-2">
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => handleToggleSelectRow(tx.id)}
-                        className="rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-                      />
+                    {/* Row Checkbox (Far Left Column) */}
+                    <td className="py-3 pl-4 pr-2 cursor-pointer select-none">
+                      <label
+                        className="flex items-center justify-center cursor-pointer select-none w-full h-full py-1"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => handleToggleSelectRow(tx.id)}
+                          className="rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                        />
+                      </label>
                     </td>
 
                     {/* Date */}
-                    <td className="py-3 px-3 whitespace-nowrap text-slate-600 dark:text-slate-400 font-mono text-xs">
+                    <td className="py-3 px-3 whitespace-nowrap text-slate-600 dark:text-slate-400 font-mono text-xs cursor-pointer select-none">
                       <div>{tx.transactionDate}</div>
                       {tx.postedDate && tx.postedDate !== tx.transactionDate && (
-                        <div className="text-[10px] text-slate-400">Post: {tx.postedDate}</div>
+                        <div className="text-[10px] text-slate-400 select-none">Post: {tx.postedDate}</div>
                       )}
                     </td>
 
                     {/* Description - Unconstrained with full vendor name wrapping */}
-                    <td className="py-3 px-3">
-                      <div className="font-semibold text-slate-900 dark:text-white break-words whitespace-normal min-w-[200px] leading-snug">
+                    <td className="py-3 px-3 cursor-pointer">
+                      <div className="font-semibold text-slate-900 dark:text-white break-words whitespace-normal min-w-[200px] leading-snug select-text cursor-default">
                         {tx.description}
                       </div>
-                      <div className="flex items-center flex-wrap gap-1.5 mt-1">
+                      <div className="flex items-center flex-wrap gap-1.5 mt-1 select-none">
                         {/* Record Title / Card Badge */}
                         {tx.cardNumber && (
                           <span
@@ -926,17 +966,17 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                     </td>
 
                     {/* Debit */}
-                    <td className="py-3 px-3 text-right font-mono font-semibold text-slate-900 dark:text-white">
+                    <td className="py-3 px-3 text-right font-mono font-semibold text-slate-900 dark:text-white cursor-pointer select-none">
                       {tx.debit > 0 ? formatCurrency(tx.debit) : '—'}
                     </td>
 
                     {/* Credit */}
-                    <td className="py-3 px-3 text-right font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                    <td className="py-3 px-3 text-right font-mono font-semibold text-emerald-600 dark:text-emerald-400 cursor-pointer select-none">
                       {tx.credit > 0 ? formatCurrency(tx.credit) : '—'}
                     </td>
 
                     {/* Categorization Dropdown (Core Requirement) */}
-                    <td className="py-3 pr-4 pl-3">
+                    <td className="py-3 pr-4 pl-3" onClick={(e) => e.stopPropagation()}>
                       <div className="relative inline-block w-36">
                         <select
                           value={tx.category}

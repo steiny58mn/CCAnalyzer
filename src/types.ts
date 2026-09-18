@@ -53,13 +53,25 @@ export interface SavedStatement {
   totals: SavedStatementTotals;
 }
 
+export interface RemainingBalances {
+  Andrew: number;
+  Rachel: number;
+  Leisure: number;
+  enabled?: boolean;
+  asOfDate?: string;
+  notes?: string;
+}
+
 export interface CategorySummary {
   category: CategoryType;
   totalDebit: number;
   totalCredit: number;
   allocatedCredit: number;
   isCreditOverridden?: boolean;
-  netSpend: number; // Debits - allocatedCredit
+  netSpend: number; // Debits - allocatedCredit (or Total Balance if remaining balance applied)
+  statementNet?: number; // Pure statement net spend (Gross - allocatedCredit)
+  remainingBalance?: number; // Starting/carried cutoff balance
+  totalBalance?: number; // remainingBalance + statementNet
   count: number;
   percentage: number;
   color: string;
